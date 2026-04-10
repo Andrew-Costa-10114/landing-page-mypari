@@ -1,0 +1,59 @@
+.mouse-stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 25;
+  overflow: hidden;
+  contain: strict;
+}
+
+.mouse-stars__burst {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  animation: mouse-stars-burst-fade var(--mouse-stars-life, 2.5s) ease-out forwards;
+}
+
+@keyframes mouse-stars-burst-fade {
+  0% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.55;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.mouse-stars__particle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: var(--size);
+  height: var(--size);
+  margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+  font-size: var(--size);
+  line-height: 1;
+  color: var(--mouse-star-color, #e8c547);
+  text-shadow:
+    0 0 6px rgba(232, 197, 71, 0.55),
+    0 0 14px rgba(139, 92, 246, 0.25);
+  transform: translate(var(--dx), var(--dy)) rotate(var(--rot));
+  animation: mouse-stars-particle-drift var(--mouse-stars-life, 2.5s) ease-out forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes mouse-stars-particle-drift {
+  0% {
+    opacity: 0.95;
+    transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--dx) * 1.85), calc(var(--dy) * 1.65))
+      rotate(var(--rot)) scale(0.25);
+  }
+}
