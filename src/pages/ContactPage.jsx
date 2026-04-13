@@ -4,6 +4,13 @@ import { Link } from 'react-router-dom'
 const FORMSPREE_ID = import.meta.env.VITE_FORMSPREE_FORM_ID
 const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || 'hello@mypari.com'
 
+const CONTACT_TOPICS = [
+  'Joining the waitlist or early access when we open in your region',
+  'Partnerships, integrations, or media and press inquiries',
+  'Product feedback, feature ideas, or questions about how MyPari works',
+  'Legal, compliance, or jurisdictional questions (we are not yet live everywhere)',
+]
+
 export default function ContactPage() {
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
@@ -44,7 +51,7 @@ export default function ContactPage() {
           setStatus('idle')
         }
       } catch {
-        setError('Network error. Try again or use your email client below.')
+        setError('Network error. Try again or email us directly at the address below.')
         setStatus('idle')
       }
       return
@@ -68,19 +75,47 @@ export default function ContactPage() {
         </nav>
 
         <h1 id="contact-page-title">Contact Us</h1>
-        <p className="jb-contact-page__lead">
-          Send a message about partnerships, press, compliance, or general questions.
-          If you configure{' '}
-          <code className="jb-contact-page__code">VITE_FORMSPREE_FORM_ID</code> in{' '}
-          <code className="jb-contact-page__code">.env</code>, submissions are sent
-          through Formspree; otherwise your email app opens with a pre-filled message.
-        </p>
+
+        <div className="jb-contact-page__body">
+          <p className="jb-contact-page__lead">
+            Whether you are curious about MyPari, want to explore a partnership, or
+            have a question about our social peer-to-peer prediction concept—we are
+            glad you reached out. Use the form below and we will read every message.
+          </p>
+
+          <p className="jb-contact-page__lead">
+            MyPari is building a place where people create and accept prediction
+            wagers in a public feed, with escrow and fair settlement—not betting
+            against the house. We are still in concept and pre-launch mode; your note
+            helps us prioritize what to build next and where to show up first.
+          </p>
+
+          <h2 className="jb-contact-page__subhead">What you can write to us about</h2>
+          <ul className="jb-contact-page__list">
+            {CONTACT_TOPICS.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+
+          <p className="jb-contact-page__note">
+            We aim to reply within a few business days. If your question is urgent,
+            mention that in the subject line. We cannot give legal advice; for
+            regulated markets, answers may be high-level until we are licensed where
+            you are.
+          </p>
+
+          <p className="jb-contact-page__email">
+            Prefer email? Reach us at{' '}
+            <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+            {FORMSPREE_ID ? '' : ' — or use the form and choose “Send message” to open your mail app with your note pre-filled.'}
+          </p>
+        </div>
 
         {status === 'success' && (
           <p className="jb-contact-page__banner jb-contact-page__banner--ok" role="status">
             {FORMSPREE_ID
-              ? 'Message sent. We’ll get back to you soon.'
-              : 'Your email app should open with your message. If it didn’t, copy your note and send it manually.'}
+              ? 'Thank you — your message was sent. We will get back to you soon.'
+              : 'Thank you. If your mail program opened, send the message from there. If nothing opened, use the address above or try again.'}
           </p>
         )}
 
@@ -89,6 +124,8 @@ export default function ContactPage() {
             {error}
           </p>
         )}
+
+        <h2 className="jb-contact-page__subhead jb-contact-page__subhead--form">Send a message</h2>
 
         <form className="jb-contact-form" onSubmit={handleSubmit} noValidate>
           <div className="jb-contact-form__row">
@@ -99,7 +136,7 @@ export default function ContactPage() {
                 type="text"
                 required
                 autoComplete="name"
-                placeholder="Your name"
+                placeholder="Your full name"
               />
             </label>
             <label className="jb-contact-form__field">
@@ -120,7 +157,7 @@ export default function ContactPage() {
               name="subject"
               type="text"
               autoComplete="off"
-              placeholder="What is this about?"
+              placeholder="e.g. Partnership, press, waitlist, product idea"
             />
           </label>
 
@@ -129,8 +166,8 @@ export default function ContactPage() {
             <textarea
               name="message"
               required
-              rows={6}
-              placeholder="Write your message…"
+              rows={7}
+              placeholder="Tell us what you need, how we can help, or any context that will make it easier to respond."
             />
           </label>
 
